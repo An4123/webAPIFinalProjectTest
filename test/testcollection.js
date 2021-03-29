@@ -75,19 +75,52 @@ let update_details = {
 }
 
 
+let invalid_review_details = {
+    name : "Bobby Shmurder",
+    comment : "Wheres my hat", 
+    rating : "1", 
+    titleOfMovie: "movie that doesnt exsist"
+}
 
-describe('/moviecollection GET movie before the update', () => {
-    it('get a movie', (done) => {   
-        chai.request(server)
-            .get('/moviecollection')     
+describe('/reviews', () => {
+    it('trys to add an INVALID review to the database', (done) => {   // what should 'it' do
+        chai.request(server)                            // do a chai request on our server
+            .post('/reviews')                                 // do a post to 'reviews'
             .set('Authorization', token)
-            .send(movieTitle)                        
-            .end((err, res) =>{                         
+            .send(invalid_review_details)                            // send our login details
+            .end((err, res) =>{                              // should return error or response
                 console.log(JSON.stringify(res.body))
                 done();
             })
     })
 })
+
+describe('/reviews', () => {
+    it('adds a VALID review to the database', (done) => {   // what should 'it' do
+        chai.request(server)                            // do a chai request on our server
+            .post('/reviews')                                 // do a post to 'reviews'
+            .set('Authorization', token)
+            .send(review_details)                            // send our login details
+            .end((err, res) =>{                              // should return error or response
+                console.log(JSON.stringify(res.body))
+                done();
+            })
+    })
+})
+
+
+// describe('/moviecollection GET movie before the update', () => {
+//     it('get a movie', (done) => {   
+//         chai.request(server)
+//             .get('/moviecollection')     
+//             .set('Authorization', token)
+//             .send(movieTitle)                        
+//             .end((err, res) =>{                         
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
 // describe('/moviecollection PUT', () => {
 //     it('update a movie', (done) => {   
@@ -157,18 +190,5 @@ describe('/moviecollection GET movie before the update', () => {
 //     })
 // })
 
-
-// describe('/reviews', () => {
-//     it('adds a review to the database', (done) => {   // what should 'it' do
-//         chai.request(server)                            // do a chai request on our server
-//             .post('/reviews')                                 // do a post to 'reviews'
-//             .set('Authorization', token)
-//             .send(review_details)                            // send our login details
-//             .end((err, res) =>{                              // should return error or response
-//                 console.log(JSON.stringify(res.body))
-//                 done();
-//             })
-//     })
-// })
 
 

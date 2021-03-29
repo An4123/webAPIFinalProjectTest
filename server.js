@@ -125,9 +125,9 @@ router.route('/moviecollection')
                         Review.find({movieID: movie.id}).select('nameOfReviewer comment rating').exec(function (err, review){
                             if(err){
                                 return res.status(403).json({success: false, msg: "Cant Get Reviews"})
-                            } else{
-                                return res.status(200).json({ movieDetails: movie, Movie_Review : review})
                             }
+                            return res.status(200).json({ movieDetails: movie, Movie_Review : review})
+                        
                         })
                     }
                     else{res.status(200).json({success: true, msg :'movie found', movieDetails : movie})}         // else return the movie}
@@ -140,27 +140,26 @@ router.route('/moviecollection')
     .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
         Movie.findOne({title: req.body.titleOfMovie}).select('title').exec(function(err,movie){
             if (err) {
-                return res.json({message: "Error asf", error: err})
-            } else{
-                if (movie != null) {
-                    if (err){
-                        return res.json({message: "Movie was not found", error: err})
-                    } else{
-                        let review = new Review()
-                        review.nameOfReviewer = req.body.name;
-                        review.comment = req.body.comment
-                        review.rating = req.body.rating
-                        review.titleOfMovie = req.body.titleOfMovie
-                        review.movieID = movie.id
-                        review.save(function(err){
-                            if(err){
-                                return res.json({success: false, msg: "could not post review"})
-                            } else{
-                                return res.json({success: true, msg: "Review added"})
-                            }
-                        })
-                    }
+                return res.json({message: "There was an error", error: err})
+            } 
+            if (movie != null) {
+                if (err){
+                   throw err
                 }
+                let review = new Review()
+                review.nameOfReviewer = req.body.name;
+                review.comment = req.body.comment
+                review.rating = req.body.rating
+                review.titleOfMovie = req.body.titleOfMovie
+                review.movieID = movie.id
+                review.save(function(err){
+                    if(err){
+                        return res.json({success: false, msg: "could not post review"})
+                    }
+                    return res.json({success: true, msg: "Review added"})
+                })
+            } else{
+                return res.json({message: "Movie was not found", error: err})
             }
         })
     })
