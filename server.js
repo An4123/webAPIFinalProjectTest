@@ -140,7 +140,7 @@ router.route('/reviews')
     .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
         Movie.findOne({title: req.body.titleOfMovie}).select('title').exec(function(err,movie){
             if (err) {
-                res.json({message: "Error asf", error: err})
+                res.json({message: "Error", error: err})
             } else{
                 if (movie != null) {
                     if (err){
