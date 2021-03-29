@@ -39,9 +39,9 @@ let login_details = {
 
 let review_details = {
     name : "Bobby Shmurder",
-    comment : "Fuck the car, Wheres my hat", 
+    comment : "Wheres my hat", 
     rating : "1", 
-    titleOfMovie: "Dude Where is My Car"
+    titleOfMovie: "Dude Where's My Car"
 }
 
 describe('/signin', () => {
@@ -61,7 +61,8 @@ describe('/signin', () => {
 })
 
 let movieTitle = {
-    title: "Dude Where is My Car"
+    title: "Dude Where's My Car",
+    review: "true"
 }
 
 let updatedMovieTitle = {
@@ -75,18 +76,18 @@ let update_details = {
 
 
 
-// describe('/moviecollection GET movie before the update', () => {
-//     it('get a movie', (done) => {   
-//         chai.request(server)
-//             .get('/moviecollection')     
-//             .set('Authorization', token)
-//             .send(movieTitle)                        
-//             .end((err, res) =>{                         
-//                 console.log(JSON.stringify(res.body))
-//                 done();
-//             })
-//     })
-// })
+describe('/moviecollection GET movie before the update', () => {
+    it('get a movie', (done) => {   
+        chai.request(server)
+            .get('/moviecollection')     
+            .set('Authorization', token)
+            .send(movieTitle)                        
+            .end((err, res) =>{                         
+                console.log(JSON.stringify(res.body))
+                done();
+            })
+    })
+})
 
 // describe('/moviecollection PUT', () => {
 //     it('update a movie', (done) => {   
@@ -101,44 +102,44 @@ let update_details = {
 //     })
 // })
 
-describe('/moviecollection GET after the update', () => {
-    it('get a movie', (done) => {   
-        chai.request(server)
-            .get('/moviecollection')     
-            .set('Authorization', token)
-            .send(updatedMovieTitle)                        
-            .end((err, res) =>{                         
-                console.log(JSON.stringify(res.body))
-                done();
-            })
-    })
-})
+// describe('/moviecollection GET after the update', () => {
+//     it('get a movie', (done) => {   
+//         chai.request(server)
+//             .get('/moviecollection')     
+//             .set('Authorization', token)
+//             .send(updatedMovieTitle)                        
+//             .end((err, res) =>{                         
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
-describe('/moviecollection DELETE ', () => {
-    it('DELETE a movie', (done) => {   
-        chai.request(server)
-            .delete('/moviecollection')     
-            .set('Authorization', token)
-            .send(updatedMovieTitle)                        
-            .end((err, res) =>{                         
-                console.log(JSON.stringify(res.body))
-                done();
-            })
-    })
-})
+// describe('/moviecollection DELETE ', () => {
+//     it('DELETE a movie', (done) => {   
+//         chai.request(server)
+//             .delete('/moviecollection')     
+//             .set('Authorization', token)
+//             .send(updatedMovieTitle)                        
+//             .end((err, res) =>{                         
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
-describe('/moviecollection GET after the update', () => {
-    it('get a movie', (done) => {   
-        chai.request(server)
-            .get('/moviecollection')     
-            .set('Authorization', token)
-            .send(updatedMovieTitle)                        
-            .end((err, res) =>{                         
-                console.log(JSON.stringify(res.body))
-                done();
-            })
-    })
-})
+// describe('/moviecollection GET after the update', () => {
+//     it('get a movie', (done) => {   
+//         chai.request(server)
+//             .get('/moviecollection')     
+//             .set('Authorization', token)
+//             .send(updatedMovieTitle)                        
+//             .end((err, res) =>{                         
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
 
 // describe('/moviecollection', () => {

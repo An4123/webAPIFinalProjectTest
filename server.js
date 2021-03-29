@@ -122,11 +122,11 @@ router.route('/moviecollection')
                     res.json({success : false, msg: "no movie exists"})
                 }else{
                     if(req.body.review === 'true'){
-                        Review.find({movideID: movie.id}).select('nameOfReviewer comment rating').exec(function (err, review){
+                        Review.find({movieID: movie.id}).select('nameOfReviewer comment rating').exec(function (err, review){
                             if(err){
-                                return res.json({success: false, msg: "Cant Get Reviews"})
+                                return res.status(403).json({success: false, msg: "Cant Get Reviews"})
                             } else{
-                                return res.json({MovieDetails: movie, Movie_Review : review})
+                                return res.status(200).json({ movieDetails: movie, Movie_Review : review})
                             }
                         })
                     }
@@ -136,11 +136,11 @@ router.route('/moviecollection')
         })
     })
 
-router.route('/reviews')
+    router.route('/reviews')
     .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
         Movie.findOne({title: req.body.titleOfMovie}).select('title').exec(function(err,movie){
             if (err) {
-                res.json({message: "Error", error: err})
+                res.json({message: "Error asf", error: err})
             } else{
                 if (movie != null) {
                     if (err){
@@ -165,6 +165,7 @@ router.route('/reviews')
             }
         })
     })
+
 
 
 
