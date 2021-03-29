@@ -144,7 +144,7 @@ router.route('/moviecollection')
             } else{
                 if (movie != null) {
                     if (err){
-                        res.json({message: "Movie was not found", error: err})
+                        return res.json({message: "Movie was not found", error: err})
                     } else{
                         let review = new Review()
                         review.nameOfReviewer = req.body.name;
@@ -154,8 +154,7 @@ router.route('/moviecollection')
                         review.movieID = movie.id
                         review.save(function(err){
                             if(err){
-                                res.json({success: false, msg: "could not post review"})
-                                throw err
+                                return res.json({success: false, msg: "could not post review"})
                             } else{
                                 return res.json({success: true, msg: "Review added"})
                             }
