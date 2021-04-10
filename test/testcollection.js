@@ -44,6 +44,27 @@ let review_details = {
     titleOfMovie: "Dude Where's My Car"
 }
 
+let new_user_details = {
+    name : "An V1212o",
+    username: "Bema1212h",
+    password : "12345"
+}
+
+// describe('/signup', () => {
+//     it('will check our log in info', (done) => {   
+//         chai.request(server)
+//             .post('/signup')                            
+//             .send(new_user_details)                        
+//             .end((err, res) =>{                         
+//                 console.log(JSON.stringify(res.body))
+//                 // saves us the token
+//                 if(res.body.msg !== 'Authentication failed.') {
+//                     token = res.body.token;
+//                 }
+//                 done();
+//             })
+//     })
+// })
 describe('/signin', () => {
     it('will check our log in info', (done) => {   
         chai.request(server)
@@ -82,31 +103,31 @@ let invalid_review_details = {
     titleOfMovie: "movie that doesnt exsist"
 }
 
-describe('/reviews', () => {
-    it('trys to add an INVALID review to the database', (done) => {   // what should 'it' do
-        chai.request(server)                            // do a chai request on our server
-            .post('/reviews')                                 // do a post to 'reviews'
-            .set('Authorization', token)
-            .send(invalid_review_details)                            // send our login details
-            .end((err, res) =>{                              // should return error or response
-                console.log(JSON.stringify(res.body))
-                done();
-            })
-    })
-})
+// describe('/reviews', () => {
+//     it('trys to add an INVALID review to the database', (done) => {   // what should 'it' do
+//         chai.request(server)                            // do a chai request on our server
+//             .post('/reviews')                                 // do a post to 'reviews'
+//             .set('Authorization', token)
+//             .send(invalid_review_details)                            // send our login details
+//             .end((err, res) =>{                              // should return error or response
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
-describe('/reviews', () => {
-    it('adds a VALID review to the database', (done) => {   // what should 'it' do
-        chai.request(server)                            // do a chai request on our server
-            .post('/reviews')                                 // do a post to 'reviews'
-            .set('Authorization', token)
-            .send(review_details)                            // send our login details
-            .end((err, res) =>{                              // should return error or response
-                console.log(JSON.stringify(res.body))
-                done();
-            })
-    })
-})
+// describe('/reviews', () => {
+//     it('adds a VALID review to the database', (done) => {   // what should 'it' do
+//         chai.request(server)                            // do a chai request on our server
+//             .post('/reviews')                                 // do a post to 'reviews'
+//             .set('Authorization', token)
+//             .send(review_details)                            // send our login details
+//             .end((err, res) =>{                              // should return error or response
+//                 console.log(JSON.stringify(res.body))
+//                 done();
+//             })
+//     })
+// })
 
 
 // describe('/moviecollection GET movie before the update', () => {

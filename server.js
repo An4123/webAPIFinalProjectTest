@@ -128,7 +128,8 @@ router.route('/moviecollection')
                             if(err){
                                 return res.status(403).json({success: false, msg: "Cant Get Reviews"})
                             }
-                            return res.status(200).json({ movieDetails: movie, Movie_Review : review})
+                            var rating = movie.avgRating.reduce(function(a,b){ return a+b;})
+                            return res.status(200).json({ movieDetails: movie, Movie_Review : review, avgRating : "rating"})
                         
                         })
                     }
@@ -152,7 +153,7 @@ router.route('/moviecollection')
                 review.nameOfReviewer = req.body.name;
                 review.comment = req.body.comment
                 review.rating = req.body.rating
-                movie.avgRating = (req.body.rating + movie.avgRating) / 2
+                movie.avgRating.push(req.body.rating)
                 review.titleOfMovie = req.body.titleOfMovie
                 review.movieID = movie.id
                 review.save(function(err){

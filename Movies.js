@@ -21,7 +21,7 @@ var movieSchema = new Schema({
     genre: {type: String, required : true, enum: ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Thriller', 'Western']},
     // characters in movie
     characters: {type : [{characterName: String, actorName: String}], required : true}, 
-    avgRating : {type : Number}
+    avgRating : {type : [Number]}
 });
 
 //return the model to server
