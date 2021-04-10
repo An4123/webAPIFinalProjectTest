@@ -14,7 +14,7 @@ mongoose.set('useCreateIndex', true)
 
 // Movie schema
 var movieSchema = new Schema({
-    title: {type: String, required : true,},    // title of movie
+    title: {type: String, required : true},    // title of movie
     imageUrl: {type: String},                      // url to cover of movie
     release: {type: Date, required : true},     // release date
     // movie genre
