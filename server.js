@@ -74,8 +74,10 @@ router.route('/moviecollection')
     .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
         var movie = new Movie()
         movie.title = req.body.title
+        movie.imageUrl = req.body.imageUrl
         movie.release = req.body.release
         movie.genre = req.body.genre
+        movie.avgRating = 0
         movie.characters = req.body.characters
         if(req.body.title === "" || req.body.release === "" || req.body.genre === "" || req.body.characters === ""){
             return res.json({success: false, message: "Not all fields were filled out"})
@@ -113,7 +115,7 @@ router.route('/moviecollection')
     })
 
     .get(authJwtController.isAuthenticated, function (req,res){           // searches for one
-        Movie.findOne({title: req.body.title}).select('title genre release characters').exec(function(err, movie){
+        Movie.findOne({title: req.body.title}).select('title image genre release characters').exec(function(err, movie){
             if(err){
                 res.json({message: "Error Finding Movie"})    // if we cant find movie or some error
             }
@@ -150,6 +152,7 @@ router.route('/moviecollection')
                 review.nameOfReviewer = req.body.name;
                 review.comment = req.body.comment
                 review.rating = req.body.rating
+                movie.avgRating = (req.body.rating + movie.avgRating) / 2
                 review.titleOfMovie = req.body.titleOfMovie
                 review.movieID = movie.id
                 review.save(function(err){

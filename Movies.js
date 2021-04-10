@@ -14,10 +14,14 @@ mongoose.set('useCreateIndex', true)
 
 // Movie schema
 var movieSchema = new Schema({
-    title: {type: String, required : true,},
-    release: {type: Date, required : true},
+    title: {type: String, required : true,},    // title of movie
+    imageUrl: {type: String},                      // url to cover of movie
+    release: {type: Date, required : true},     // release date
+    // movie genre
     genre: {type: String, required : true, enum: ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Mystery', 'Thriller', 'Western']},
-    characters: {type : [{characterName: String, actorName: String}], required : true}
+    // characters in movie
+    characters: {type : [{characterName: String, actorName: String}], required : true}, 
+    avgRating : {type : Number}
 });
 
 //return the model to server
