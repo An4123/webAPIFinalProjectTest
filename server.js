@@ -294,6 +294,27 @@ router.route('/moviecollection')
             return res.status(200).json({success: true, message: "Successfully added new movie"})
         })
     })
+    .get(authJwtController.isAuthenticated, function (req, res) {
+        // find the food using the request title
+        // .select is there to tell us what will be returned
+            Foods.find().exec(function (err, food) {
+            // if we have an error then we display it
+                if(err) 
+                {
+                    return res.status(401).json({message: "Something is wrong: \n", error: err});
+                }
+                // otherwise just show the food that was returned
+                else if(food == null)
+                {
+                    return res.status(404).json({success: false, message: "Error: food item not found."});
+                }
+                else
+                {
+                    return res.status(200).json(food);
+                }
+            })
+    })
+    
 
 router.route('/moviecollection/:movieid')
     .get(authJwtController.isAuthenticated, function (req, res) {
