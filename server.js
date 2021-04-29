@@ -14,6 +14,7 @@
     var User = require('./Users');
     var Movie = require('./Movies');
     var Review = require('./Reviews');
+    var Foods = require('./Food');
     
     var app = express();
     app.use(cors());
@@ -69,19 +70,18 @@
         })
     });
     
-    router.route('/moviecollection')
-        .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
-            var movie = new Movie()
-            movie.title = req.body.title
-            movie.imageUrl = req.body.imageUrl
-            movie.release = req.body.release
-            movie.genre = req.body.genre
-            movie.avgRating = 0
-            movie.characters = req.body.characters
-            if(req.body.title === "" || req.body.release === "" || req.body.genre === "" || req.body.characters === ""){
+    router.route('/menu')
+        .post(authJwtController.isAuthenticated, function(req,res){            // create new food item
+            var food = new Foods()
+            food.name = req.body.name
+            food.imageUrl = req.body.imageUrl
+            food.cost = req.body.cost
+            food.calories = req.body.calories
+
+            if(req.body.name === "" ||  req.body.cost === "" || req.body.calories === ""){
                 return res.json({success: false, message: "Not all fields were filled out"})
             }
-            movie.save(function(err){
+            food.save(function(err){
                 if (err) {
                     if (err.code === 11000){
                         return res.json({success: false, message: "This movie already exist"})
@@ -91,52 +91,6 @@
             })
         })
     
-        .delete(authJwtController.isAuthenticated, function (req,res){          // delete movie
-            Movie.findOneAndDelete({title: req.body.title}).select('title genre release characters').exec(function(err, movie){
-                if (err) {
-                    console.log("could not delete")
-                    throw err
-                } 
-                else if (movie === null){
-                    res.json({msg: "Movie not found"})
-                }
-                else {
-                    res.json({msg: "Movie is deleted"})
-                }
-            })
-        })
-    
-        .put(authJwtController.isAuthenticated, function (req,res) {        // updates a movie
-            Movie.findOneAndUpdate({title: req.body.originalTitle}, {title: req.body.newTitle}, function (err) {
-                if (err) {throw err}                                                // if error throw error
-                else{res.status(200).json({success: true, msg: 'movie updated'})}   // else updated
-            })
-        })
-    
-        .get(authJwtController.isAuthenticated, function (req,res){           // searches for one
-            Movie.findOne({title: req.body.title}).select('title image genre release characters').exec(function(err, movie){
-                if(err){
-                    res.json({message: "Error Finding Movie"})    // if we cant find movie or some error
-                }
-                else{
-                    if (movie === null){
-                        res.json({success : false, msg: "no movie exists"})
-                    }else{
-                        if(req.body.review === 'true'){
-                            Review.find({movieID: movie.id}).select('nameOfReviewer comment rating').exec(function (err, review){
-                                if(err){
-                                    return res.status(403).json({success: false, msg: "Cant Get Reviews"})
-                                }
-                                var rating = movie.avgRating.reduce(function(a,b){ return a+b;})
-                                return res.status(200).json({ movieDetails: movie, Movie_Review : review, avgRating : "rating"})
-                            
-                            })
-                        }
-                        else{res.status(200).json({success: true, msg :'movie found', movieDetails : movie})}         // else return the movie}
-                    }
-                }
-            })
-        })
     
         router.route('/reviews')
         .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
