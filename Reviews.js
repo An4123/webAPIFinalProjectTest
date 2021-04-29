@@ -1,5 +1,6 @@
-var mongoose = require('mongoose')          // allow us to connect to mongo data base on atlas
-var Schema = mongoose.Schema                // need our schema for db
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
 
@@ -12,14 +13,14 @@ try{
 
 mongoose.set('useCreateIndex', true)
 
-// Review schema
+// review
 var reviewSchema = new Schema({
-    nameOfReviewer: {type: String, required : true},
+    name: {type: String, required: true},
     comment: {type: String},
-    rating: {type: String, required : true},
-    titleOfMovie: {type: String, required : true},
-    movieID: {type : mongoose.Types.ObjectId, required: true}
+    rating: {type: Number,required: true},
+    title: {type: String, required: true},
+    movieid: {type: mongoose.Types.ObjectId, required: true}
 });
 
-//return the model to server
+// return the model to server
 module.exports = mongoose.model('Review', reviewSchema);
