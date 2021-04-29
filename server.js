@@ -36,9 +36,12 @@ router.post('/signup', function(req, res) {
         // we save the user and if run into an error then we put the error out
         user.save(function(err){
             if (err) {
-                if (err.code === 11000) return res.json({success: false, message: 'A user with that username already exist'})
-                else
-                    return res.json(err)
+                if (err.code === 11000) {
+                    return res.json({success: false, message: 'A user with that username already exist'})
+                }
+                else{
+                    return res.status(400).json(err)
+                }
             }
             // otherwise send a happy note
             console.log("created new user")
@@ -56,16 +59,21 @@ router.post('/signin', function (req, res) {
             res.send(err);
         }
 
-        user.comparePassword(userNew.password, function(isMatch) {
-            if (isMatch) {
-                var userToken = { id: user.id, username: user.username };
-                var token = jwt.sign(userToken, process.env.SECRET_KEY);
-                res.json ({success: true, token: 'JWT ' + token});
-            }
-            else {
-                res.status(401).send({success: false, msg: 'Authentication failed.'});
-            }
-        })
+        if (user == null){
+            res.status(401).json({success: false,  msg: 'No user found with the follow username'})
+        }
+        else{
+            user.comparePassword(userNew.password, function(isMatch) {
+                if (isMatch) {
+                    var userToken = { id: user.id, username: user.username };
+                    var token = jwt.sign(userToken, process.env.SECRET_KEY);
+                    res.json ({success: true, token: 'JWT ' + token});
+                }
+                else {
+                    res.status(401).send({success: false, msg: 'Authentication failed.'});
+                }
+            })
+        }
     })
 });
 

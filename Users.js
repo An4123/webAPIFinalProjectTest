@@ -19,6 +19,7 @@ var UserSchema = new Schema({
     password: { type: String, required: true, select: false }
 });
 
+
 // hash the password before the user is saved
 UserSchema.pre('save', function(next) {
     var user = this;
@@ -43,6 +44,8 @@ UserSchema.methods.comparePassword = function(password, callback) {
         callback(isMatch) ;
     });
 };
+
+
 
 // return the model
 module.exports = mongoose.model('User', UserSchema);
