@@ -15,6 +15,7 @@ var cors = require('cors');
 var User = require('./Users');
 var Movie = require('./Movies');
 var Review = require('./Reviews');
+var Foods = require('./Food')
 var mongoose = require('mongoose');
 
 
@@ -100,89 +101,6 @@ router.post('/signin', function (req, res) {
 
 // this is where we manipulate the database
 router.route('/moviecollection')
-    // gets all movies
-    .get(authJwtController.isAuthenticated, function (req, res) {
-        // find the movie using the request title
-        // .select is there to tell us what will be returned
-        if(req.query == null || req.query.review !== "true"){
-            Movie.find().exec(function (err, movie) {
-            // if we have an error then we display it
-                if(err) 
-                {
-                    return res.status(401).json({message: "Something is wrong: \n", error: err});
-                }
-                // otherwise just show the movie that was returned
-                else if(movie == null)
-                {
-                    return res.status(404).json({success: false, message: "Error: movies not found."});
-                }
-                else
-                {
-                    return res.status(200).json(movie);
-                }
-            })
-        }
-        else 
-        {
-            Movie.aggregate()
-            .match(req.body)
-            .lookup({from: 'reviews', localField: '_id', foreignField: 'movieid', as: 'reviews'})
-            .exec(function (err, movie) {
-                if (err)
-                {
-                    return res.send(err);
-                }
-                // find average reviews four our movies
-                var numOfMovies = movie.length;
-                if (movie && numOfMovies > 0) 
-                {
-                    movie.forEach(function(mp)
-                    {
-                        var totalSum = 0;
-                        mp.reviews.forEach(function(rp)
-                        {
-                            // add the reviews together into one variable
-                            totalSum = totalSum + rp.rating;
-                        });
-
-
-                        if(mp.reviews.length > 0){
-                            Object.assign(mp, {avgRating: totalSum/mp.reviews.length});
-                        }
-                    });
-                    movie.sort((a,b) => {
-                        return b.avgRating - a.avgRating;
-                    });
-                    return res.status(200).json({result: movie});
-                }
-                else {
-                    return res.status(403).json({success: false, message: "Movies not found."});
-                }
-            });
-        }
-    })
-
-    router.route('/menu')
-    .post(authJwtController.isAuthenticated, function(req,res){            // create new food item
-        var food = new Foods()
-        food.name = req.body.name
-        food.imageUrl = req.body.imageUrl
-        food.cost = req.body.cost
-        food.calories = req.body.calories
-
-        if(req.body.name === "" ||  req.body.cost === "" || req.body.calories === ""){
-            return res.json({success: false, message: "Not all fields were filled out"})
-        }
-        food.save(function(err){
-            if (err) {
-                if (err.code === 11000){
-                    return res.json({success: false, message: "This movie already exist"})
-                } else { throw err }
-            }
-            return res.status(200).json({success: true, message: "Successfully added new movie"})
-        })
-    })
-
 
     // post adds a movie
     .post(authJwtController.isAuthenticated, function(req,res){            // create new movie
@@ -292,6 +210,89 @@ router.route('/moviecollection')
                 }
             })
         }
+    })
+
+    // gets all movies
+    .get(authJwtController.isAuthenticated, function (req, res) {
+        // find the movie using the request title
+        // .select is there to tell us what will be returned
+        if(req.query == null || req.query.review !== "true"){
+            Movie.find().exec(function (err, movie) {
+            // if we have an error then we display it
+                if(err) 
+                {
+                    return res.status(401).json({message: "Something is wrong: \n", error: err});
+                }
+                // otherwise just show the movie that was returned
+                else if(movie == null)
+                {
+                    return res.status(404).json({success: false, message: "Error: movies not found."});
+                }
+                else
+                {
+                    return res.status(200).json(movie);
+                }
+            })
+        }
+        else 
+        {
+            Movie.aggregate()
+            .match(req.body)
+            .lookup({from: 'reviews', localField: '_id', foreignField: 'movieid', as: 'reviews'})
+            .exec(function (err, movie) {
+                if (err)
+                {
+                    return res.send(err);
+                }
+                // find average reviews four our movies
+                var numOfMovies = movie.length;
+                if (movie && numOfMovies > 0) 
+                {
+                    movie.forEach(function(mp)
+                    {
+                        var totalSum = 0;
+                        mp.reviews.forEach(function(rp)
+                        {
+                            // add the reviews together into one variable
+                            totalSum = totalSum + rp.rating;
+                        });
+
+
+                        if(mp.reviews.length > 0){
+                            Object.assign(mp, {avgRating: totalSum/mp.reviews.length});
+                        }
+                    });
+                    movie.sort((a,b) => {
+                        return b.avgRating - a.avgRating;
+                    });
+                    return res.status(200).json({result: movie});
+                }
+                else {
+                    return res.status(403).json({success: false, message: "Movies not found."});
+                }
+            });
+        }
+    })
+
+    router.route('/menu')
+    .post(authJwtController.isAuthenticated, function(req,res){            // create new food item
+        var food = new Foods()
+        food.name = req.body.name
+        food.imageUrl = req.body.imageUrl
+        food.cost = req.body.cost
+        food.calories = req.body.calories
+
+        if(req.body.name === "" ||  req.body.cost === "" || req.body.calories === ""){
+            return res.json({success: false, message: "Not all fields were filled out"})
+        }
+        food.save(function(err){
+            if (err) {
+                if (err.code === 11000){
+                    return res.json({success: false, message: "This movie already exist"})
+                } else { throw err }
+            }
+            return res.status(200).json({success: true, message: "Successfully added new movie"})
+        })
     })
 
 router.route('/moviecollection/:movieid')
